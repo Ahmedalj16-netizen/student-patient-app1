@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Student/Patient Management System</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="navbar">
+        <div class="navbar-brand">Student/Patient Portal</div>
+        <div class="navbar-menu">
+            <span id="userGreeting" class="user-greeting"></span>
+            <button id="logoutBtn" class="btn-logout">Logout</button>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="dashboard">
+            <aside class="sidebar">
+                <ul class="menu">
+                    <li><a href="#" class="menu-item active" data-section="overview">Overview</a></li>
+                    <li><a href="#" class="menu-item" data-section="students">Students</a></li>
+                    <li><a href="#" class="menu-item" data-section="patients">Patients</a></li>
+                    <li><a href="#" class="menu-item" data-section="users">All Users</a></li>
+                </ul>
+            </aside>
+            
+            <main class="main-content">
+                <!-- Overview Section -->
+                <section id="overview" class="content-section active">
+                    <h2>Welcome to Your Dashboard</h2>
+                    <div class="dashboard-cards">
+                        <div class="card">
+                            <h3>Profile Information</h3>
+                            <p><strong>Name:</strong> <span id="userName"></span></p>
+                            <p><strong>Email:</strong> <span id="userEmail"></span></p>
+                            <p><strong>Role:</strong> <span id="userRole"></span></p>
+                        </div>
+                        <div class="card">
+                            <h3>System Status</h3>
+                            <p><strong>Status:</strong> <span class="status-badge active">Active</span></p>
+                            <p><strong>Last Login:</strong> <span>Today</span></p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Students Section -->
+                <section id="students" class="content-section">
+                    <h2>Students</h2>
+                    <button class="btn-add" id="addStudentBtn">Add New Student</button>
+                    <table id="studentsTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Student ID</th>
+                                <th>Major</th>
+                                <th>Enrollment Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="studentsList"></tbody>
+                    </table>
+                </section>
+                
+                <!-- Patients Section -->
+                <section id="patients" class="content-section">
+                    <h2>Patients</h2>
+                    <button class="btn-add" id="addPatientBtn">Add New Patient</button>
+                    <table id="patientsTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Patient ID</th>
+                                <th>Date of Birth</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="patientsList"></tbody>
+                    </table>
+                </section>
+                
+                <!-- All Users Section -->
+                <section id="users" class="content-section">
+                    <h2>All Users</h2>
+                    <table id="usersTable" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                            </tr>
+                        </thead>
+                        <tbody id="usersList"></tbody>
+                    </table>
+                </section>
+            </main>
+        </div>
+    </div>
+    
+    <!-- Add Student Modal -->
+    <div id="studentModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Student</h2>
+            <form id="addStudentForm">
+                <div class="form-group">
+                    <label for="studentUserId">Select User</label>
+                    <select id="studentUserId" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="studentId">Student ID</label>
+                    <input type="text" id="studentId" placeholder="e.g., STU001" required>
+                </div>
+                <div class="form-group">
+                    <label for="major">Major</label>
+                    <input type="text" id="major" placeholder="e.g., Computer Science" required>
+                </div>
+                <div class="form-group">
+                    <label for="enrollmentDate">Enrollment Date</label>
+                    <input type="date" id="enrollmentDate" required>
+                </div>
+                <button type="submit" class="btn-submit">Add Student</button>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Add Patient Modal -->
+    <div id="patientModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Patient</h2>
+            <form id="addPatientForm">
+                <div class="form-group">
+                    <label for="patientUserId">Select User</label>
+                    <select id="patientUserId" required></select>
+                </div>
+                <div class="form-group">
+                    <label for="patientId">Patient ID</label>
+                    <input type="text" id="patientId" placeholder="e.g., PAT001" required>
+                </div>
+                <div class="form-group">
+                    <label for="dateOfBirth">Date of Birth</label>
+                    <input type="date" id="dateOfBirth" required>
+                </div>
+                <div class="form-group">
+                    <label for="medicalHistory">Medical History</label>
+                    <textarea id="medicalHistory" placeholder="Enter medical history" rows="4"></textarea>
+                </div>
+                <button type="submit" class="btn-submit">Add Patient</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="dashboard.js"></script>
+</body>
+</html>
