@@ -47,7 +47,7 @@ document.querySelectorAll('.menu-item').forEach(item => {
 // Load students
 async function loadStudents() {
     try {
-        const response = await fetch('/api/students');
+        const response = await fetch('/api/db?action=students');
         const students = await response.json();
         
         const tbody = document.getElementById('studentsList');
@@ -74,7 +74,7 @@ async function loadStudents() {
 // Load patients
 async function loadPatients() {
     try {
-        const response = await fetch('/api/patients');
+        const response = await fetch('/api/db?action=patients');
         const patients = await response.json();
         
         const tbody = document.getElementById('patientsList');
@@ -100,7 +100,7 @@ async function loadPatients() {
 // Load all users
 async function loadUsers() {
     try {
-        const response = await fetch('/api/users');
+        const response = await fetch('/api/db?action=users');
         const users = await response.json();
         
         const tbody = document.getElementById('usersList');
@@ -179,7 +179,7 @@ document.getElementById('addStudentForm').addEventListener('submit', async (e) =
     const enrollmentDate = document.getElementById('enrollmentDate').value;
     
     try {
-        const response = await fetch('/api/students', {
+        const response = await fetch('/api/db?action=students', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -216,7 +216,7 @@ document.getElementById('addPatientForm').addEventListener('submit', async (e) =
     const medicalHistory = document.getElementById('medicalHistory').value;
     
     try {
-        const response = await fetch('/api/patients', {
+        const response = await fetch('/api/db?action=patients', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
