@@ -47,18 +47,19 @@ document.querySelectorAll('.menu-item').forEach(item => {
 // Load students
 async function loadStudents() {
     try {
-        const response = await fetch('/api/db?action=students');
-        const students = await response.json();
+        const students = JSON.parse(localStorage.getItem('students')) || [];
+        const users = JSON.parse(localStorage.getItem('users')) || [];
         
         const tbody = document.getElementById('studentsList');
         tbody.innerHTML = '';
         
-        students.forEach(student => {
+        students.forEach((student, index) => {
+            const user = users.find(u => u.id === student.user_id);
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${student.id}</td>
-                <td>${student.firstName} ${student.lastName}</td>
-                <td>${student.email}</td>
+                <td>${index + 1}</td>
+                <td>${user?.firstName || ''} ${user?.lastName || ''}</td>
+                <td>${user?.email || ''}</td>
                 <td>${student.studentId}</td>
                 <td>${student.major || 'N/A'}</td>
                 <td>${student.enrollmentDate || 'N/A'}</td>
@@ -74,18 +75,19 @@ async function loadStudents() {
 // Load patients
 async function loadPatients() {
     try {
-        const response = await fetch('/api/db?action=patients');
-        const patients = await response.json();
+        const patients = JSON.parse(localStorage.getItem('patients')) || [];
+        const users = JSON.parse(localStorage.getItem('users')) || [];
         
         const tbody = document.getElementById('patientsList');
         tbody.innerHTML = '';
         
-        patients.forEach(patient => {
+        patients.forEach((patient, index) => {
+            const user = users.find(u => u.id === patient.user_id);
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${patient.id}</td>
-                <td>${patient.firstName} ${patient.lastName}</td>
-                <td>${patient.email}</td>
+                <td>${index + 1}</td>
+                <td>${user?.firstName || ''} ${user?.lastName || ''}</td>
+                <td>${user?.email || ''}</td>
                 <td>${patient.patientId}</td>
                 <td>${patient.dateOfBirth || 'N/A'}</td>
                 <td><span class="status-badge active">${patient.status}</span></td>
@@ -100,16 +102,15 @@ async function loadPatients() {
 // Load all users
 async function loadUsers() {
     try {
-        const response = await fetch('/api/db?action=users');
-        const users = await response.json();
+        const users = JSON.parse(localStorage.getItem('users')) || [];
         
         const tbody = document.getElementById('usersList');
         tbody.innerHTML = '';
         
-        users.forEach(user => {
+        users.forEach((user, index) => {
             const row = document.createElement('tr');
             row.innerHTML = `
-                <td>${user.id}</td>
+                <td>${index + 1}</td>
                 <td>${user.firstName} ${user.lastName}</td>
                 <td>${user.email}</td>
                 <td>${user.role}</td>
@@ -117,7 +118,6 @@ async function loadUsers() {
             tbody.appendChild(row);
         });
         
-        // Populate user select dropdowns for modals
         populateUserSelects(users);
     } catch (error) {
         console.error('Error loading users:', error);
@@ -179,27 +179,15 @@ document.getElementById('addStudentForm').addEventListener('submit', async (e) =
     const enrollmentDate = document.getElementById('enrollmentDate').value;
     
     try {
-        const response = await fetch('/api/db?action=students', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                user_id: userId,
-                studentId,
-                major,
-                enrollmentDate
-            })
-        });
+        let students = JSON.parse(localStorage.getItem('students')) || [];
+        const newStudent = { id: Date.now(), user_id: parseInt(userId), studentId, major, enrollmentDate, status: 'active' };
+        students.push(newStudent);
+        localStorage.setItem('students', JSON.stringify(students));
         
-        if (response.ok) {
-            alert('Student added successfully!');
-            studentModal.classList.remove('open');
-            document.getElementById('addStudentForm').reset();
-            loadStudents();
-        } else {
-            alert('Failed to add student');
-        }
+        alert('Student added successfully!');
+        studentModal.classList.remove('open');
+        document.getElementById('addStudentForm').reset();
+        loadStudents();
     } catch (error) {
         console.error('Error adding student:', error);
         alert('An error occurred');
@@ -216,27 +204,15 @@ document.getElementById('addPatientForm').addEventListener('submit', async (e) =
     const medicalHistory = document.getElementById('medicalHistory').value;
     
     try {
-        const response = await fetch('/api/db?action=patients', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                user_id: userId,
-                patientId,
-                dateOfBirth,
-                medicalHistory
-            })
-        });
+        let patients = JSON.parse(localStorage.getItem('patients')) || [];
+        const newPatient = { id: Date.now(), user_id: parseInt(userId), patientId, dateOfBirth, medicalHistory, status: 'active' };
+        patients.push(newPatient);
+        localStorage.setItem('patients', JSON.stringify(patients));
         
-        if (response.ok) {
-            alert('Patient added successfully!');
-            patientModal.classList.remove('open');
-            document.getElementById('addPatientForm').reset();
-            loadPatients();
-        } else {
-            alert('Failed to add patient');
-        }
+        alert('Patient added successfully!');
+        patientModal.classList.remove('open');
+        document.getElementById('addPatientForm').reset();
+        loadPatients();
     } catch (error) {
         console.error('Error adding patient:', error);
         alert('An error occurred');

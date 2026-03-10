@@ -58,28 +58,23 @@
             const messageBox = document.getElementById('messageBox');
             
             try {
-                const response = await fetch('/api/db?action=login', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ email, password })
-                });
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+                const user = users.find(u => u.email === email && u.password === password);
                 
-                const data = await response.json();
-                
-                if (response.ok) {
-                    messageBox.className = 'message-box success';
-                    messageBox.textContent = 'Login successful! Redirecting...';
-                    localStorage.setItem('user', JSON.stringify(data.user));
-                    setTimeout(() => {
-                        window.location.href = 'dashboard.html';
-                    }, 1500);
-                } else {
+                if (!user) {
                     messageBox.className = 'message-box error';
-                    messageBox.textContent = data.message || 'Login failed';
+                    messageBox.textContent = 'Invalid credentials';
+                    return;
                 }
+                
+                localStorage.setItem('user', JSON.stringify({ id: user.id, email: user.email, firstName: user.firstName, lastName: user.lastName, role: user.role }));
+                messageBox.className = 'message-box success';
+                messageBox.textContent = 'Login successful! Redirecting...';
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 1500);
             } catch (error) {
+                console.error('Error:', error);
                 messageBox.className = 'message-box error';
                 messageBox.textContent = 'An error occurred. Please try again.';
             }
